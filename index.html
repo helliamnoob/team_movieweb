@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 목록</title>
+    <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+    <div class='title'>
+        <h1>최고 평점 영화 컬렉션</h1>
+    </div>
+    <form class="search" id="search" onsubmit="handleSearch(event)">
+        <label>영화 검색 :</label>
+        <input type="text" id="search-input" placeholder="영화 제목을 검색해 보세요">
+        <button type="submit" id="search-btn" onclick="searchmovie()">검색</button>
+    </form>
+    <div class="card-list" id="card-list"></div>
+
+
+    <script src="src/js/main.js"></script>
+</body>
+</html>
