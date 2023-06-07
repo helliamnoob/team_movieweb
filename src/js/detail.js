@@ -102,18 +102,4 @@ function search() {
 }
 
 const searchBtn = document.getElementById("searchBtn")
-// searchBtn.addEventListener("click",function(){
-//   search() 
-// });  
-
-//엔터키는 나중에 시도 해보겠습니다..
-
-// var input = document.getElementById("search-input");
-
-//     input.addEventListener("keyup", function (event) {
-//       if (event.code === 'Enter') {
-//         event.preventDefault();
-//         document.getElementById("search-input").click();
-//       }
-//     });
 
