@@ -13,25 +13,27 @@
     </section> -->
     </div>
 
-    
+
     <form id="reviewForm">
-        <!-- 리뷰 작성 폼 -->
-        <input type="text" id="author" placeholder="작성자 이름" required>
-        <textarea id="content" placeholder="리뷰 내용" required></textarea> <!-- textarea로 변경 -->
-        <span class="character-count">0 / 100</span> <!-- 글자 수 표시 -->
-        <input type="password" id="password" placeholder="비밀번호" required>
-        <div class="rating">
-          <label>평점:</label>
-          <select id="rating">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </div>
-        <button type="submit">리뷰 작성</button>
-      </form>
+      <!-- 리뷰 작성 폼 -->
+      <input type="text" id="author" placeholder="작성자 이름" required>
+      <textarea id="content" placeholder="리뷰 내용" required></textarea> <!-- textarea로 변경 -->
+      <span class="character-count">0 / 100</span> <!-- 글자 수 표시 -->
+      <input type="password" id="password" placeholder="비밀번호" required>
+      <div class="rating">
+        <label>평점:</label>
+        <select id="rating">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <button type="submit">리뷰 작성</button>
+    </form>
+  
+    <div id="reviewList"></div>
 
     <script src="src/js/detail.js"></script>
 </body>
