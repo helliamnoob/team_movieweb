@@ -15,25 +15,21 @@ async function getMovieInfo() {
     'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1',
     options,
   );
+
   const movieinfo = await response.json();
 
   return movieinfo;
 }
-
 
 //페이지가 켜졌을 때 영화 리스트 보여주는 함수
 async function listing() {
   const data = await getMovieInfo();
   const rows = data.results;
   rows.forEach((a) => {
-    let title = a.title;
-    let overview = a.overview;
-    let vote_average = a.vote_average;
-    let poster_path = a.poster_path;
-    let movieId = a.id;
+    const {title, overview, vote_average, poster_path, id} = a;
     const titlepath = document.getElementById('card-list');
 
-    let temp_html = `<div class="movie-card" id="${movieId}" onclick="showMovieId(this.id)">
+    let temp_html = `<div class="movie-card" id="${id}" onclick="showMovieId(${id})">
                         <img src="https://image.tmdb.org/t/p/w500${poster_path}">
                         <h5 class="card-title" id="title">${title}</h5>
                         <p class="card-text" id="overview">${overview}</p>
@@ -68,5 +64,8 @@ form.addEventListener("submit", (event) => {
 });
 
 function showMovieId(id) {
-  alert(`Movie ID: ${id}`);
+
+  const url = "detail.html?";
+  const data = id;
+  location.href = url + data;
 }
