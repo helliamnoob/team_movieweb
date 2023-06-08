@@ -22,23 +22,37 @@ async function getMovieInfo() {
 }
 
 //페이지가 켜졌을 때 영화 리스트 보여주는 함수
-async function listing() {
-  const data = await getMovieInfo();
-  const rows = data.results;
-  rows.forEach((a) => {
-    const {title, overview, vote_average, poster_path, id} = a;
-    const titlepath = document.getElementById('card-list');
+export async function listing() {
+  try{
+      const data = await getMovieInfo();
+      const rows = data.results;
 
-    let temp_html = `<div class="movie-card" id="${id}" onclick="showMovieId(${id})">
-                        <img src="https://image.tmdb.org/t/p/w500${poster_path}">
-                        <h5 class="card-title" id="title">${title}</h5>
-                        <p class="card-text" id="overview">${overview}</p>
-                        <p class="vote" id="vote">${vote_average}</p>
-                    </div>`;
+      // 영화 제목을 기준으로 정렬
+      rows.sort((a, b) => a.title.localeCompare(b.title));
 
-    titlepath.insertAdjacentHTML('beforeend', temp_html);
+      const card = document.createElement('div');
+        card.className = 'card-list';
+        const moviesContainer = document.getElementById('main-page');
+        moviesContainer.appendChild(card);
+        const titlepath = document.querySelector('.card-list');
+      rows.forEach((a) => {
+        const {title, overview, vote_average, poster_path, id} = a;
+        let temp_html = `<div class="movie-card" id="${id}" onclick="location.href='src/pages/detail.html?id=${id}'">
+                            <img src="https://image.tmdb.org/t/p/w200${poster_path}">
+                            <h5 class="card-title" id="title">${title}</h5>
+                            <p class="card-text">${overview}</p>
+                            <p class="vote">${vote_average}</p>
+                        </div>`;
+        titlepath.insertAdjacentHTML('beforeend', temp_html);   
+        console.log(titlepath);
   });
+  }
+  catch(error){
+    console.log(error);
+  }
 }
+
+
 
 function searchMovies() {
   const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
@@ -64,8 +78,7 @@ form.addEventListener("submit", (event) => {
 });
 
 function showMovieId(id) {
-
   const url = "detail.html?";
   const data = id;
-  location.href = url + data;
+  location.href = `src/pages/detail.html?id=${id}`;
 }
