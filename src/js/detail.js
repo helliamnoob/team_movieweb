@@ -142,8 +142,9 @@ function displayReviews() {
   let reviews = localStorage.getItem('reviews');
   if (reviews) {
     reviews = JSON.parse(reviews);
-    reviews.forEach(function (review) {
-      if (review.movieId === id) { // 현재 페이지의 영화에 해당하는 리뷰인지 확인
+    reviews
+    .filter(review => review.movieId === id) // 현재 페이지의 영화에 해당하는 리뷰만 필터링
+    .forEach(review => {
         const reviewItem = document.createElement('div');
         reviewItem.className = 'review';
         reviewItem.innerHTML = '<p><strong>작성자:</strong> ' + review.author + '</p><p><strong>내용:</strong> ' + review.content + '</p>';
@@ -165,9 +166,7 @@ function displayReviews() {
           deleteReview(review);
         };
         reviewItem.appendChild(deleteButton);
-
         reviewList.appendChild(reviewItem);
-      }
     });
   }
 }
