@@ -27,6 +27,9 @@ export async function listing() {
       const data = await getMovieInfo();
       const rows = data.results;
 
+      // 영화 제목을 기준으로 정렬
+      rows.sort((a, b) => a.title.localeCompare(b.title));
+
       const card = document.createElement('div');
         card.className = 'card-list';
         const moviesContainer = document.getElementById('main-page');
