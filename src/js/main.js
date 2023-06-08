@@ -22,22 +22,47 @@ async function getMovieInfo() {
 }
 
 //페이지가 켜졌을 때 영화 리스트 보여주는 함수
-async function listing() {
+export async function listing() {
   const data = await getMovieInfo();
   const rows = data.results;
   rows.forEach((a) => {
     const {title, overview, vote_average, poster_path, id} = a;
-    const titlepath = document.getElementById('card-list');
+   
 
-    let temp_html = `<div class="movie-card" id="${id}" onclick="showMovieId(${id})">
-                        <img src="https://image.tmdb.org/t/p/w500${poster_path}">
+    let temp_html = `<div class="movie-card" id="${id}" >
+                        <img src="https://image.tmdb.org/t/p/w200${poster_path}">
                         <h5 class="card-title" id="title">${title}</h5>
                         <p class="card-text" id="overview">${overview}</p>
                         <p class="vote" id="vote">${vote_average}</p>
                     </div>`;
 
-    titlepath.insertAdjacentHTML('beforeend', temp_html);
+    const card = document.createElement('div');
+    card.id = 'card-list';
+    card.className = 'card-list';
+    const moviesContainer = document.getElementById('main-page');
+    moviesContainer.appendChild(card);
+    const titlepath = document.getElementById('card-list');
+    console.log(temp_html);
+    titlepath.insertAdjacentHTML('beforeend', temp_html);   
+    
   });
+
+
+}
+
+const cardList = document.getElementById('main-page');
+console.log(cardList);
+cardList.addEventListener("click", handleClickCard);
+function handleClickCard({target}){
+  event.preventDefault();
+  console.log('눌림!');
+  if(target === cardList) return;
+  if(target.matches(".movie-card"));{
+    alert(`id: ${target.id}` );
+  }
+  {
+    alert(`id:${target.parentNode.id}`);
+  }
 }
 
 function searchMovies() {
@@ -63,9 +88,8 @@ form.addEventListener("submit", (event) => {
   searchMovies();
 });
 
-function showMovieId(id) {
-
+export function showMovieId(id) {
   const url = "detail.html?";
   const data = id;
-  location.href = url + data;
+  location.href = url+data
 }
