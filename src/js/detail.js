@@ -129,6 +129,7 @@ function saveReview(review) {
   } else {
     reviews = [];
   }
+  review.movieId = id;
   reviews.push(review);
   localStorage.setItem('reviews', JSON.stringify(reviews));
 }
@@ -141,74 +142,86 @@ function displayReviews() {
   let reviews = localStorage.getItem('reviews');
   if (reviews) {
     reviews = JSON.parse(reviews);
-    reviews.forEach(function (review, index) {
-      const reviewItem = document.createElement('div');
-      reviewItem.className = 'review';
-      reviewItem.innerHTML = '<p><strong>작성자:</strong> ' + review.author + '</p><p><strong>내용:</strong> ' + review.content + '</p>';
+    reviews.forEach(function (review) {
+      if (review.movieId === id) { // 현재 페이지의 영화에 해당하는 리뷰인지 확인
+        const reviewItem = document.createElement('div');
+        reviewItem.className = 'review';
+        reviewItem.innerHTML = '<p><strong>작성자:</strong> ' + review.author + '</p><p><strong>내용:</strong> ' + review.content + '</p>';
 
-      const ratingElement = document.createElement('p');
-      ratingElement.innerHTML = '<strong>평점:</strong> ' + getStarRating(review.rating); // 평점을 별로 변환하여 표시
-      reviewItem.appendChild(ratingElement);
+        const ratingElement = document.createElement('p');
+        ratingElement.innerHTML = '<strong>평점:</strong> ' + getStarRating(review.rating);
+        reviewItem.appendChild(ratingElement);
 
-      const editButton = document.createElement('button');
-      editButton.innerHTML = '수정';
-      editButton.onclick = function () {
-        editReview(index);
-      };
-      reviewItem.appendChild(editButton);
+        const editButton = document.createElement('button');
+        editButton.innerHTML = '수정';
+        editButton.onclick = function () {
+          editReview(review);
+        };
+        reviewItem.appendChild(editButton);
 
-      const deleteButton = document.createElement('button');
-      deleteButton.innerHTML = '삭제';
-      deleteButton.onclick = function () {
-        deleteReview(index);
-      };
-      reviewItem.appendChild(deleteButton);
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = '삭제';
+        deleteButton.onclick = function () {
+          deleteReview(review);
+        };
+        reviewItem.appendChild(deleteButton);
 
-      reviewList.appendChild(reviewItem);
+        reviewList.appendChild(reviewItem);
+      }
     });
   }
 }
 
 // 리뷰 수정
-function editReview(index) {
+function editReview(review) {
   let reviews = localStorage.getItem('reviews');
   if (reviews) {
     reviews = JSON.parse(reviews);
-    const review = reviews[index];
 
-    const enteredPassword = prompt('비밀번호를 입력하세요.');
-    if (enteredPassword === review.password) {
-      const newContent = prompt('새로운 리뷰 내용을 입력하세요.', review.content);
-      const newRating = parseInt(prompt('새로운 평점을 입력하세요 (1-5)', review.rating));
-      if (newRating > 5) {
-        alert('평점은 5 이하의 숫자로 입력해주세요.');
+    // 현재 영화에 해당하는 리뷰를 찾음
+    const reviewIndex = reviews.findIndex(item => item.movieId === review.movieId);
+    if (reviewIndex !== -1) {
+      const existingReview = reviews[reviewIndex];
+
+      const enteredPassword = prompt('비밀번호를 입력하세요.');
+      if (enteredPassword === existingReview.password) {
+        const newContent = prompt('새로운 리뷰 내용을 입력하세요.', existingReview.content);
+        const newRating = parseInt(prompt('새로운 평점을 입력하세요 (1-5)', existingReview.rating));
+        if (newRating > 5) {
+          alert('평점은 5 이하의 숫자로 입력해주세요.');
+        } else {
+          existingReview.rating = newRating;
+          existingReview.content = newContent;
+
+          localStorage.setItem('reviews', JSON.stringify(reviews));
+          displayReviews();
+        }
       } else {
-        review.rating = newRating;
-        review.content = newContent;
-
-        localStorage.setItem('reviews', JSON.stringify(reviews));
-        displayReviews();
+        alert('비밀번호가 일치하지 않습니다.');
       }
-    } else {
-      alert('비밀번호가 일치하지 않습니다.');
     }
   }
 }
 
 // 리뷰 삭제
-function deleteReview(index) {
+function deleteReview(review) {
   let reviews = localStorage.getItem('reviews');
   if (reviews) {
     reviews = JSON.parse(reviews);
-    const review = reviews[index];
 
-    const enteredPassword = prompt('비밀번호를 입력하세요.');
-    if (enteredPassword === review.password) {
-      reviews.splice(index, 1);
-      localStorage.setItem('reviews', JSON.stringify(reviews));
-      displayReviews();
-    } else {
-      alert('비밀번호가 일치하지 않습니다.');
+    // 현재 영화에 해당하는 리뷰를 찾음
+    const reviewIndex = reviews.findIndex(item => item.movieId === review.movieId);
+    if (reviewIndex !== -1) {
+      const existingReview = reviews[reviewIndex];
+
+      const enteredPassword = prompt('비밀번호를 입력하세요.');
+      if (enteredPassword === existingReview.password) {
+        reviews.splice(reviewIndex, 1);
+        localStorage.setItem('reviews', JSON.stringify(reviews));
+        displayReviews();
+      } else {
+        alert('비밀번호가 일치하지 않습니다.');
+      }
     }
   }
 }
