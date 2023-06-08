@@ -11,7 +11,7 @@ const options = {
 //TMDB API를 통해서 데이터를 받고 제이슨화 해서 movieCard라는 변수안에 createMovieCard를
 //담아서 moviesContainer에 자식으로 등록 
 let url = location.href;
-let idx = url.indexOf("?");
+let idx = url.indexOf("=");
 let id;
 if(idx >= 0) {
   idx = idx + 1;

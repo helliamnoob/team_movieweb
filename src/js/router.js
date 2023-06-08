@@ -1,6 +1,6 @@
 import {listing} from '../js/main.js'
 import {hidden} from '../js/about.js'
-import { showMovieId } from '../js/main.js';
+
 
 const route = (id, event) => {
     event = event || window.event;
@@ -9,11 +9,10 @@ const route = (id, event) => {
     if(routeid === 'home')
     {   
         
+        event.preventDefault();
         window.history.pushState({}, "", event.target.href);
+        setTimeout(() => listing(), 100);
         handleLocation();
-        listing();
-        showMovieId();
-       
     }
     else
     {
@@ -29,11 +28,7 @@ const routes = {
     "/index.html" : "src/pages/home.html",
     "/": "src/pages/home.html",
     "/detail.html": "src/pages/detail.html",
-    "/detail": "src/pages/detail.html",
     "/about" : "src/pages/about.html",
-    "/detail" : "src/pages/detail.html",
-    
-
 };
 
 const handleLocation = async () => {
@@ -41,11 +36,10 @@ const handleLocation = async () => {
     const route = routes[path] || routes[404];
     const html = await fetch(route).then((data) => data.text());
     document.getElementById("main-page").innerHTML = html;
-    console.log(html);
 };
 
 window.onpopstate = handleLocation;
 window.route = route;
 
-handleLocation();
+//handleLocation();
 
