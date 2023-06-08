@@ -1,40 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>main moive page</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>main moive page</title>
 </head>
+
 <body>
-    <button type="button" id="back">뒤로가기</button>
-    <div id="movies-container">
+  <button type="button" id="back">뒤로가기</button>
+  <div id="movies-container">
     <!-- <section class=movie-list>
     </section> -->
+  </div>
+
+
+  <form id="reviewForm">
+    <!-- 리뷰 작성 폼 -->
+    <input type="text" id="author" placeholder="작성자 이름" required>
+    <textarea id="content" placeholder="리뷰 내용" required></textarea> <!-- textarea로 변경 -->
+    <span class="character-count">0 / 100</span> <!-- 글자 수 표시 -->
+    <input type="password" id="password" placeholder="비밀번호" required>
+    <div class="rating">
+      <label>평점:</label>
+      <select id="rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
     </div>
+    <button type="submit">리뷰 작성</button>
+  </form>
 
+  <div id="reviewList"></div>
 
-    <form id="reviewForm">
-      <!-- 리뷰 작성 폼 -->
-      <input type="text" id="author" placeholder="작성자 이름" required>
-      <textarea id="content" placeholder="리뷰 내용" required></textarea> <!-- textarea로 변경 -->
-      <span class="character-count">0 / 100</span> <!-- 글자 수 표시 -->
-      <input type="password" id="password" placeholder="비밀번호" required>
-      <div class="rating">
-        <label>평점:</label>
-        <select id="rating">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-      </div>
-      <button type="submit">리뷰 작성</button>
-    </form>
+  <button id="showSignupFormBtn">회원가입</button>
+  <button id="showLoginFormBtn">로그인</button>
   
-    <div id="reviewList"></div>
+  <div id="signupFormContainer" style="display: none;">
+    <form id="signupForm">
+      <h2>회원 가입</h2>
+      <div>
+        <label for="registerUsername">사용자명:</label>
+        <input type="text" id="registerUsername" required>
+      </div>
+      <div>
+        <label for="registerPassword">비밀번호:</label>
+        <input type="password" id="registerPassword" required autocomplete="current-password">
+      </div>
+      <button type="submit">가입하기</button>
+    </form>
+  </div>
+  
+  <!-- 로그인 폼 -->
+  <div id="loginFormContainer" style="display: none;">
+    <form id="loginForm">
+      <h2>로그인</h2>
+      <div>
+        <label for="loginUsername">사용자명:</label>
+        <input type="text" id="loginUsername" required>
+      </div>
+      <div>
+        <label for="loginPassword">비밀번호:</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <button type="submit">로그인</button>
+    </form>
+  </div>
+  <script src="../js/detail.js"></script>
+  
+  <button id="logoutBtn">로그아웃</button>
 
-    <script src="src/js/detail.js"></script>
-</body>
 </html>
