@@ -44,7 +44,7 @@ export async function listing() {
                             <p class="vote">${vote_average}</p>
                         </div>`;
         titlepath.insertAdjacentHTML('beforeend', temp_html);   
-        console.log(titlepath);
+
   });
   }
   catch(error){

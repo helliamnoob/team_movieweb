@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', function () {
+  checkDisplay()
+});
+
 //API 설정
 const API_KEY = 'fece76c90411f4d9e1fbf18bdd5303a6'
 const TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZWNlNzZjOTA0MTFmNGQ5ZTFmYmYxOGJkZDUzMDNhNiIsInN1YiI6IjY0NzZkOWYzODlkOTdmMDBkYjRlMTUxYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LIt63r6VI3rvUphHKrkrzNTOPXfGRzsaGKdHej1Xurc'
@@ -110,12 +114,14 @@ document.getElementById('reviewForm').addEventListener('submit', function (event
   const content = document.getElementById('content').value;
   const password = document.getElementById('password').value;
   const rating = document.getElementById('rating').value;
-
+  const nowId = localStorage.getItem('nowId');
+  console.log(nowId);
   const review = {
     author: author,
     content: content,
     password: password,
-    rating: rating
+    rating: rating,
+    nowId : nowId
   };
   saveReview(review);
   displayReviews();
@@ -140,6 +146,8 @@ function displayReviews() {
   reviewList.innerHTML = '';
 
   let reviews = localStorage.getItem('reviews');
+  let nowId = localStorage.getItem('nowId');
+
   if (reviews) {
     reviews = JSON.parse(reviews);
     reviews
@@ -155,21 +163,30 @@ function displayReviews() {
 
         const editButton = document.createElement('button');
         editButton.innerHTML = '수정';
+        editButton.id = "editBtn"
         editButton.onclick = function () {
           editReview(review);
         };
         reviewItem.appendChild(editButton);
 
         const deleteButton = document.createElement('button');
+        deleteButton.id = nowId;
         deleteButton.innerHTML = '삭제';
         deleteButton.onclick = function () {
           deleteReview(review);
         };
+        
+        
         reviewItem.appendChild(deleteButton);
         reviewList.appendChild(reviewItem);
+
+        deleteButton.style.display='none';
+        editButton.style.display='none';
     });
   }
+
 }
+
 
 // 리뷰 수정
 function editReview(review) {
@@ -257,6 +274,7 @@ const showSignupFormBtn = document.getElementById('showSignupFormBtn');
 const showLoginFormBtn = document.getElementById('showLoginFormBtn');
 const signupFormContainer = document.getElementById('signupFormContainer');
 const loginFormContainer = document.getElementById('loginFormContainer');
+const loginForm = document.getElementById('loginForm');
 
 showSignupFormBtn.addEventListener('click', function() {
   if (signupFormContainer.style.display === 'block') {
@@ -324,7 +342,22 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
   loginUser(username, password);
 });
 
-function loginUser(username, password) {
+
+//로그인중인지 체크하기!
+
+const loginStatus = async (id) => {
+  let token = 1;
+  let nowId = id;
+  localStorage.setItem('token', token);
+  localStorage.setItem('nowId', nowId);
+}
+const logoutStatus = async() =>{
+  let token = localStorage.getItem('token');
+  localStorage.removeItem('token');
+  localStorage.removeItem('nowId');
+}
+
+async function loginUser(username, password) {
   let users = localStorage.getItem('users');
   if (users) {
     users = JSON.parse(users);
@@ -332,10 +365,9 @@ function loginUser(username, password) {
     if (user) {
       alert('로그인에 성공했습니다.');
       // 로그인 성공 시 원하는 동작 수행
-
-      // 회원가입 버튼과 로그인 버튼 숨기기
-      showSignupFormBtn.style.display = 'none';
-      showLoginFormBtn.style.display = 'none';
+      loginStatus(username);
+      checkDisplay()
+      console.log(checkDisplay());
     } else {
       alert('사용자명 또는 비밀번호가 올바르지 않습니다.');
     }
@@ -349,15 +381,34 @@ const logoutBtn = document.getElementById('logoutBtn');
 logoutBtn.addEventListener('click', function() {
   // 로그아웃 로직 실행
   logoutUser();
+  
 });
 
-function logoutUser() {
+async function logoutUser() {
   // 로그아웃 로직 실행
-
+  logoutStatus();
   // 예시: 로그아웃 후 로직
   alert('로그아웃 되었습니다.');
-
+  checkDisplay()
   // 로그인 버튼과 회원가입 버튼 보이도록 설정
-  showSignupFormBtn.style.display = 'block';
-  showLoginFormBtn.style.display = 'block';
+}
+
+function checkDisplay() {
+  //const editBtn = document.getElementById('editBtn')
+  let reviews = localStorage.getItem('reviews');
+  let nowId = localStorage.getItem('nowId');
+  const deleteBtn = document.getElementById(`${nowId}`);
+  let token = localStorage.getItem('token');
+    reviews = JSON.parse(reviews);
+
+  if (token) {
+    showSignupFormBtn.style.display = 'none';
+    showLoginFormBtn.style.display = 'none';
+    loginForm.style.display ='none';
+  } else {
+    showSignupFormBtn.style.display = '';
+    showLoginFormBtn.style.display = '';
+    loginForm.style.display ='';
+  }
+  deleteBtn.style.display='';
 }
