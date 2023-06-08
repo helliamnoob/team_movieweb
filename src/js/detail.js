@@ -142,9 +142,8 @@ function displayReviews() {
   let reviews = localStorage.getItem('reviews');
   if (reviews) {
     reviews = JSON.parse(reviews);
-    reviews
-    .filter(review => review.movieId === id) // 현재 페이지의 영화에 해당하는 리뷰만 필터링
-    .forEach(review => {
+    reviews.forEach(function (review) {
+      if (review.movieId === id) { // 현재 페이지의 영화에 해당하는 리뷰인지 확인
         const reviewItem = document.createElement('div');
         reviewItem.className = 'review';
         reviewItem.innerHTML = '<p><strong>작성자:</strong> ' + review.author + '</p><p><strong>내용:</strong> ' + review.content + '</p>';
@@ -166,7 +165,9 @@ function displayReviews() {
           deleteReview(review);
         };
         reviewItem.appendChild(deleteButton);
+
         reviewList.appendChild(reviewItem);
+      }
     });
   }
 }
@@ -250,5 +251,164 @@ contentInput.addEventListener('input', function () {
   }
 });
 
-// 페이지 로드 시 저장된 리뷰 표시
-displayReviews();
+// 사용자 로그인 상태 변수
+let isLoggedIn = false;
+
+// 사용자 정보
+let currentUser = null;
+
+// 로그인 상태 확인 함수
+function checkLoginStatus() {
+  if (isLoggedIn) {
+    // 로그인 상태일 때 수행할 동작
+    showLoggedInUI();
+  } else {
+    // 로그아웃 상태일 때 수행할 동작
+    showLoggedOutUI();
+  }
+}
+
+// 로그인 상태 UI 표시
+function showLoggedInUI() {
+  const logoutBtn = document.getElementById('logoutBtn');
+  const showLoginFormBtn = document.getElementById('showLoginFormBtn');
+  const showSignupFormBtn = document.getElementById('showSignupFormBtn');
+  const reviewFormContainer = document.getElementById('reviewForm');
+  const loginFormContainer = document.getElementById('loginFormContainer');
+  const signupFormContainer = document.getElementById('signupFormContainer');
+
+  logoutBtn.style.display = 'block';
+  showLoginFormBtn.style.display = 'none';
+  showSignupFormBtn.style.display = 'none';
+  reviewFormContainer.style.display = 'block';
+  loginFormContainer.style.display = 'none';
+  signupFormContainer.style.display = 'none';
+}
+
+// 로그아웃 상태 UI 표시
+function showLoggedOutUI() {
+  const logoutBtn = document.getElementById('logoutBtn');
+  const showLoginFormBtn = document.getElementById('showLoginFormBtn');
+  const showSignupFormBtn = document.getElementById('showSignupFormBtn');
+  const reviewFormContainer = document.getElementById('reviewForm');
+  const loginFormContainer = document.getElementById('loginFormContainer');
+  const signupFormContainer = document.getElementById('signupFormContainer');
+
+  logoutBtn.style.display = 'none';
+  showLoginFormBtn.style.display = 'block';
+  showSignupFormBtn.style.display = 'block';
+  reviewFormContainer.style.display = 'block';
+  loginFormContainer.style.display = 'none';
+  signupFormContainer.style.display = 'none';
+}
+
+// 로그인 버튼 클릭 시 동작
+const showLoginFormBtn = document.getElementById('showLoginFormBtn');
+const loginFormContainer = document.getElementById('loginFormContainer');
+
+showLoginFormBtn.addEventListener('click', function () {
+  if (loginFormContainer.style.display === 'block') {
+    loginFormContainer.style.display = 'none';
+  } else {
+    loginFormContainer.style.display = 'block';
+    signupFormContainer.style.display = 'none';
+  }
+});
+
+// 회원가입 버튼 클릭 시 동작
+const showSignupFormBtn = document.getElementById('showSignupFormBtn');
+const signupFormContainer = document.getElementById('signupFormContainer');
+
+showSignupFormBtn.addEventListener('click', function () {
+  if (signupFormContainer.style.display === 'block') {
+    signupFormContainer.style.display = 'none';
+  } else {
+    signupFormContainer.style.display = 'block';
+    loginFormContainer.style.display = 'none';
+  }
+});
+// 사용자 등록
+document.getElementById("signupForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  // 사용자명과 비밀번호 값을 가져옴
+  var username = document.getElementById("registerUsername").value;
+  var password = document.getElementById("registerPassword").value;
+
+  registerUser(username, password);
+});
+
+function registerUser(username, password) {
+  let users = localStorage.getItem('users');
+  if (users) {
+    users = JSON.parse(users);
+  } else {
+    users = [];
+  }
+
+  // 사용자명이 이미 존재하는지 확인
+  const existingUser = users.find(user => user.username === username);
+  if (existingUser) {
+    alert('이미 존재하는 사용자명입니다. 다른 사용자명을 선택해주세요.');
+    return;
+  }
+
+  const user = {
+    username: username,
+    password: password
+  };
+
+  users.push(user);
+  localStorage.setItem('users', JSON.stringify(users));
+  alert('사용자 등록이 완료되었습니다.');
+  document.getElementById("signupForm").reset();
+}
+
+// 로그인
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  // 사용자명과 비밀번호 값을 가져옴
+  var username = document.getElementById("loginUsername").value;
+  var password = document.getElementById("loginPassword").value;
+
+  loginUser(username, password);
+});
+
+function loginUser(username, password) {
+  let users = localStorage.getItem('users');
+  if (users) {
+    users = JSON.parse(users);
+    const user = users.find(user => user.username === username && user.password === password);
+    if (user) {
+      alert('로그인에 성공했습니다.');
+      isLoggedIn = true; // 로그인 상태 변수 변경
+      currentUser = user; // 현재 사용자 설정
+      checkLoginStatus(); // 로그인 상태 확인 및 UI 업데이트
+      
+      // 로그인 폼 숨기기
+      loginFormContainer.style.display = 'none';
+    } else {
+      alert('사용자명 또는 비밀번호가 올바르지 않습니다.');
+    }
+  } else {
+    alert('등록된 사용자가 없습니다. 먼저 사용자를 등록해주세요.');
+  }
+}
+
+// 로그아웃 버튼 클릭 이벤트 처리
+const logoutBtn = document.getElementById('logoutBtn');
+
+logoutBtn.addEventListener('click', function () {
+  logout();
+});
+
+// 로그아웃 동작 함수
+function logout() {
+  isLoggedIn = false; // 로그인 상태 변수 변경
+  currentUser = null; // 현재 사용자 초기화
+  checkLoginStatus(); // 로그인 상태 확인 및 UI 업데이트
+}
+
+// 초기 로그인 상태 확인 및 UI 설정
+checkLoginStatus();
