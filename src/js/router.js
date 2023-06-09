@@ -1,5 +1,6 @@
 import { listing } from '../js/main.js';
-import { hidden, hiddenOff, weather } from '../js/about.js';
+import { hidden, hiddenOff, weather, getClock } from '../js/about.js';
+
 
 const route = (id, event) => {
    event = event || window.event;
@@ -17,6 +18,7 @@ const route = (id, event) => {
       window.history.pushState({}, '', event.target.href);
       handleLocation();
       hidden();
+      setInterval(getClock,1000);
       setTimeout(() => weather(), 100);
    }
 };
@@ -40,3 +42,4 @@ window.onpopstate = handleLocation;
 window.route = route;
 
 handleLocation();
+

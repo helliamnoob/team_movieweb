@@ -27,23 +27,16 @@
          </div>
          <form class="search" id="search" onsubmit="handleSearch(event)">
             <label>영화 검색 :</label>
-            <input
-               type="text"
-               id="search-input"
-               placeholder="영화 제목을 검색해 보세요"
-            />
-            <button type="submit" id="search-btn" onclick="searchmovie()">
-               검색
-            </button>
-         </form>
-         <div class="sort-buttons">
-            <button onclick="sortMoviesByTitle()">제목순 정렬</button>
-            <button onclick="sortMoviesByRating()">평점순 정렬</button>
-         </div>
-         <div id="main-page"></div>
-      </div>
-      <script type="module" src="src/js/main.js"></script>
-      <script type="module" src="src/js/router.js"></script>
-      <script type="module" src="src/js/about.js"></script>
-   </body>
+            <input type="text" id="search-input" placeholder="영화 제목을 검색해 보세요">
+            <button type="submit" id="search-btn" onclick="searchmovie()">검색</button>
+        </form>
+        
+        
+        <div id="main-page"></div>
+        
+    </div>
+    <script type="module" src="src/js/main.js"></script>
+    <script type="module" src="src/js/router.js"></script>
+    <script type="module" src="src/js/about.js"></script>
+</body>
 </html>
