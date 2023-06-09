@@ -54,7 +54,7 @@ const createMovieCard = (movie) => {
    const voteAverageElement = document.createElement('p');
    voteAverageElement.className = 'vote-average';
 
-   image.src = `https://image.tmdb.org/t/p/w500${poster_path}`;
+   image.src = `https://image.tmdb.org/t/p/w300${poster_path}`;
 
    titleElement.textContent = title;
    overviewElement.textContent = overview;
@@ -97,4 +97,5 @@ function search() {
       .catch((err) => console.error(err));
 }
 
-const searchBtn = document.getElementById('searchBtn');
+const searchBtn = document.getElementById("searchBtn")
+
