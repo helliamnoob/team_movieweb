@@ -1,23 +1,23 @@
 import { listing } from '../js/main.js';
-import { hidden, getClock, weather } from '../js/about.js';
-
+import { hidden, hiddenOff, weather } from '../js/about.js';
 
 const route = (id, event) => {
    event = event || window.event;
    const routeid = id;
-   console.log(routeid);
+
    if (routeid === 'home') {
       event.preventDefault();
       window.history.pushState({}, '', event.target.href);
       setTimeout(() => listing(), 100);
       handleLocation();
-   } else {
+
+      hiddenOff();
+   } else if (routeid === 'about') {
       event.preventDefault();
       window.history.pushState({}, '', event.target.href);
       handleLocation();
       hidden();
-      setInterval(getClock, 1000)
-      weather();
+      setTimeout(() => weather(), 100);
    }
 };
 
@@ -39,4 +39,4 @@ const handleLocation = async () => {
 window.onpopstate = handleLocation;
 window.route = route;
 
-//handleLocation();
+handleLocation();
