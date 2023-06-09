@@ -79,13 +79,10 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
 
 //로그인중인지 체크하기!
 const loginStatus = async (id) => {
-  let token = 1;
   let nowId = id;
-  localStorage.setItem('token', token);
   localStorage.setItem('nowId', nowId);
 }
 const logoutStatus = async() =>{
-  localStorage.removeItem('token');
   localStorage.removeItem('nowId');
 }
 

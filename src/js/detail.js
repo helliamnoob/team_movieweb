@@ -37,10 +37,6 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-U
 
 
 
-const backbtn = document.getElementById('back');
-backbtn.addEventListener('click', function(){history.back();})
-
-
 const moviesContainer = document.getElementById('movies-container');
 
 //구조분해할당

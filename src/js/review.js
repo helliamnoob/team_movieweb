@@ -4,7 +4,7 @@ document
    .getElementById('reviewForm')
    .addEventListener('submit', function (event) {
       event.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
-
+      let loginStatus = localStorage.getItem('nowId');
       const author = document.getElementById('author').value;
       const content = document.getElementById('content').value;
       const password = document.getElementById('password').value;
@@ -20,10 +20,13 @@ document
          nowId: nowId,
          number: number,
       };
-      saveReview(review);
-      displayReviews();
+      if (loginStatus) {
+         saveReview(review);
+         displayReviews();
+      } else {
+         alert('로그인해주세요!');
+      }
    });
-   
 
 // 리뷰를 저장하는 함수
 function saveReview(review) {
@@ -65,23 +68,23 @@ export function displayReviews() {
                '<strong>평점:</strong> ' + getStarRating(review.rating);
             reviewItem.appendChild(ratingElement);
             reviewList.appendChild(reviewItem);
-            if(review.nowId === nowId){
-                const editButton = document.createElement('button');
-                editButton.innerHTML = '수정';
-                editButton.id = 'editBtn';
-                editButton.onclick = function () {
-                editReview(review);
-                };
-                reviewItem.appendChild(editButton);
+            if (review.nowId === nowId) {
+               const editButton = document.createElement('button');
+               editButton.innerHTML = '수정';
+               editButton.id = 'editBtn';
+               editButton.onclick = function () {
+                  editReview(review);
+               };
+               reviewItem.appendChild(editButton);
 
-                const deleteButton = document.createElement('button');
-                deleteButton.id = nowId;
-                deleteButton.innerHTML = '삭제';
-                deleteButton.onclick = function () {
-                deleteReview(review);
-                };
+               const deleteButton = document.createElement('button');
+               deleteButton.id = nowId;
+               deleteButton.innerHTML = '삭제';
+               deleteButton.onclick = function () {
+                  deleteReview(review);
+               };
 
-                reviewItem.appendChild(deleteButton);
+               reviewItem.appendChild(deleteButton);
             }
          });
    }
@@ -95,7 +98,7 @@ function editReview(review) {
 
       // 현재 영화에 해당하는 리뷰를 찾음
       const reviewIndex = reviews.findIndex(
-         (item) => item.movieId === review.movieId,
+         (item) => item.number === review.number,
       );
       if (reviewIndex !== -1) {
          const existingReview = reviews[reviewIndex];
@@ -133,7 +136,6 @@ function deleteReview(review) {
 
       const reviewIndex = reviews.findIndex(
          (item) => item.number === review.number,
-       
       );
 
       if (reviewIndex !== -1) {
