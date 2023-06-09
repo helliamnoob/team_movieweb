@@ -1,6 +1,5 @@
 import { listing } from '../js/main.js';
-import { hidden } from '../js/about.js';
-
+import { hidden ,getClock} from '../js/about.js';
 
 const route = (id, event) => {
    event = event || window.event;
@@ -16,6 +15,7 @@ const route = (id, event) => {
       window.history.pushState({}, '', event.target.href);
       handleLocation();
       hidden();
+      setInterval(getClock,1000);
    }
 };
 
@@ -37,4 +37,4 @@ const handleLocation = async () => {
 window.onpopstate = handleLocation;
 window.route = route;
 
-//handleLocation();
+// handleLocation();
