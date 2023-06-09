@@ -1,5 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {});
-
 //API 설정
 const API_KEY = 'fece76c90411f4d9e1fbf18bdd5303a6';
 const TOKEN =

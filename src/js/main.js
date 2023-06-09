@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
    sortButtons[1].addEventListener('click', sortMoviesByRating); // 평점순 정렬 버튼 클릭 시 영화를 평점순으로 정렬합니다.
 });
 
+//영화api 가져오기
 async function getMovieInfo() {
    const options = {
       method: 'GET',
@@ -49,7 +50,8 @@ export async function listing() {
    }
 }
 
-function sortMoviesByTitle() {
+//정렬버튼 기능
+export function sortMoviesByTitle() {
    const cardList = document.querySelector('.card-list');
    const movieCards = Array.from(cardList.querySelectorAll('.movie-card'));
    movieCards.sort((a, b) => {
@@ -66,7 +68,8 @@ function sortMoviesByTitle() {
    movieCards.forEach((card) => cardList.appendChild(card));
 }
 
-function sortMoviesByRating() {
+//정렬버튼 기능
+export function sortMoviesByRating() {
    const cardList = document.querySelector('.card-list');
    const movieCards = Array.from(cardList.querySelectorAll('.movie-card'));
    movieCards.sort((a, b) => {
@@ -77,6 +80,7 @@ function sortMoviesByRating() {
    movieCards.forEach((card) => cardList.appendChild(card));
 }
 
+//영화 검색 기능
 function searchMovies() {
    const searchTerm = document
       .getElementById('search-input')
@@ -102,9 +106,3 @@ form.addEventListener('submit', (event) => {
    event.preventDefault();
    searchMovies();
 });
-
-function showMovieId(id) {
-   const url = 'detail.html?';
-   const data = id;
-   location.href = `src/pages/detail.html?id=${id}`;
-}

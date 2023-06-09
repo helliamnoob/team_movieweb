@@ -6,8 +6,8 @@ const showSignupFormBtn = document.getElementById('showSignupFormBtn');
 const reviewFormContainer = document.getElementById('reviewForm');
 const loginFormContainer = document.getElementById('loginFormContainer');
 const signupFormContainer = document.getElementById('signupFormContainer');
-const loginForm = document.getElementById('loginForm');
 
+//회원가입창 보이게 하는 이벤트 리스너
 showSignupFormBtn.addEventListener('click', function () {
    if (signupFormContainer.style.display === 'block') {
       signupFormContainer.style.display = 'none';
@@ -17,6 +17,7 @@ showSignupFormBtn.addEventListener('click', function () {
    }
 });
 
+//로그인창 보이게 하는 이벤트 리스너
 showLoginFormBtn.addEventListener('click', function () {
    if (loginFormContainer.style.display === 'block') {
       loginFormContainer.style.display = 'none';
@@ -87,6 +88,7 @@ const logoutStatus = async () => {
    localStorage.removeItem('nowId');
 };
 
+//로그인 확인기능
 async function loginUser(username, password) {
    let users = localStorage.getItem('users');
    if (users) {
@@ -124,8 +126,8 @@ async function logoutUser() {
    // 로그인 버튼과 회원가입 버튼 보이도록 설정
 }
 
+//로그인 상태에서 UI설정
 function checkLoginStatus() {
-   let reviews = localStorage.getItem('reviews');
    let nowId = localStorage.getItem('nowId');
    if (nowId) {
       // 로그인 상태일 때 수행할 동작
