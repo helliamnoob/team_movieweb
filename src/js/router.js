@@ -11,9 +11,9 @@ const route = (id, event) => {
       window.history.pushState({}, '', event.target.href);
       setTimeout(() => listing(), 100);
       handleLocation();
-
       hiddenOff();
-   } else if (routeid === 'about') {
+   }
+    else if(routeid === 'about') {
       event.preventDefault();
       window.history.pushState({}, '', event.target.href);
       handleLocation();
