@@ -27,6 +27,46 @@ showLoginFormBtn.addEventListener('click', function () {
    }
 });
 
+// 사용자 로그인 상태 변수
+let isLoggedIn = false;
+
+// 사용자 정보
+let currentUser = null;
+
+// 쿠키 설정 함수
+function setCookie(name, value, days) {
+   const date = new Date();
+   date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+   const expires = 'expires=' + date.toUTCString();
+   document.cookie = name + '=' + value + ';' + expires + ';path=/';
+}
+
+// 쿠키 가져오기 함수
+function getCookie(name) {
+   const cookieName = name + '=';
+   const cookies = document.cookie.split(';');
+   for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i];
+      while (cookie.charAt(0) === ' ') {
+         cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(cookieName) === 0) {
+         return cookie.substring(cookieName.length, cookie.length);
+      }
+   }
+   return '';
+}
+
+// 초기 로그인 상태 확인 및 UI 설정
+checkLoginStatus();
+
+// 페이지 로드 시 쿠키에서 로그인 상태 확인
+window.addEventListener('load', function () {
+   const isLoggedInCookie = getCookie('isLoggedIn');
+   isLoggedIn = isLoggedInCookie === 'true';
+   checkLoginStatus();
+});
+
 // 사용자 등록
 document
    .getElementById('signupForm')
@@ -38,6 +78,7 @@ document
       var password = document.getElementById('registerPassword').value;
 
       registerUser(username, password);
+      checkLoginStatus();
    });
 
 function registerUser(username, password) {
@@ -100,6 +141,13 @@ async function loginUser(username, password) {
          alert('로그인에 성공했습니다.');
          // 로그인 성공 시 원하는 동작 수행
          loginStatus(username);
+         
+
+         isLoggedIn = true; // 로그인 상태 변수 변경
+         currentUser = { username: username }; // 현재 사용자 설정
+
+         // 쿠키에 로그인 상태 저장
+         setCookie('isLoggedIn', 'true', 7);
          displayReviews();
          checkLoginStatus();
       } else {
@@ -118,18 +166,20 @@ logoutBtn.addEventListener('click', function () {
 async function logoutUser() {
    // 로그아웃 로직 실행
    logoutStatus();
+   isLoggedIn = false; // 로그인 상태 변수 변경
+   currentUser = null; // 현재 사용자 초기화
    // 예시: 로그아웃 후 로직
    alert('로그아웃 되었습니다.');
    displayReviews();
-   checkLoginStatus();
+   checkLoginStatus(); // 로그인 상태 확인 및 UI 업데이트
 
-   // 로그인 버튼과 회원가입 버튼 보이도록 설정
+   // 쿠키에서 로그인 상태 제거
+   setCookie('isLoggedIn', 'false', 0);
 }
 
-//로그인 상태에서 UI설정
+// 사용자 로그인 상태 확인 함수
 function checkLoginStatus() {
-   let nowId = localStorage.getItem('nowId');
-   if (nowId) {
+   if (isLoggedIn) {
       // 로그인 상태일 때 수행할 동작
       showLoggedInUI();
    } else {
@@ -137,6 +187,7 @@ function checkLoginStatus() {
       showLoggedOutUI();
    }
 }
+
 // 로그인 상태 UI 표시
 function showLoggedInUI() {
    logoutBtn.style.display = 'block';
