@@ -102,4 +102,3 @@ function search() {
 }
 
 const searchBtn = document.getElementById("searchBtn")
-
