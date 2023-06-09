@@ -1,5 +1,5 @@
 import { listing } from '../js/main.js';
-import { hidden } from '../js/about.js';
+import { hidden, getClock, weather } from '../js/about.js';
 
 
 const route = (id, event) => {
@@ -16,6 +16,8 @@ const route = (id, event) => {
       window.history.pushState({}, '', event.target.href);
       handleLocation();
       hidden();
+      setInterval(getClock, 1000)
+      weather();
    }
 };
 

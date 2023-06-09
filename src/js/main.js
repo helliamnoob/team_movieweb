@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
   listing(); //필수 DOM제어하기 api 사용하여 DOM로드되었을 때 영화 리스트함수 실행시킴
+  const sortButtons = document.querySelectorAll('.sort-buttons button');
+  sortButtons[0].addEventListener('click', sortMoviesByTitle); // 제목순 정렬 버튼 클릭 시 영화를 제목순으로 정렬합니다.
+  sortButtons[1].addEventListener('click', sortMoviesByRating); // 평점순 정렬 버튼 클릭 시 영화를 평점순으로 정렬합니다.
 });
 
 async function getMovieInfo() {
@@ -26,10 +29,6 @@ export async function listing() {
   try{
       const data = await getMovieInfo();
       const rows = data.results;
-
-      // 영화 제목을 기준으로 정렬
-      rows.sort((a, b) => a.title.localeCompare(b.title));
-
       const card = document.createElement('div');
         card.className = 'card-list';
         const moviesContainer = document.getElementById('main-page');
@@ -52,7 +51,27 @@ export async function listing() {
   }
 }
 
+function sortMoviesByTitle() {
+  const cardList = document.querySelector('.card-list');
+  const movieCards = Array.from(cardList.querySelectorAll('.movie-card'));
+  movieCards.sort((a, b) => {
+      const titleA = a.querySelector('.card-title').textContent.trim().toLowerCase();
+      const titleB = b.querySelector('.card-title').textContent.trim().toLowerCase();
+      return titleA.localeCompare(titleB);
+  });
+  movieCards.forEach(card => cardList.appendChild(card));
+}
 
+function sortMoviesByRating() {
+  const cardList = document.querySelector('.card-list');
+  const movieCards = Array.from(cardList.querySelectorAll('.movie-card'));
+  movieCards.sort((a, b) => {
+      const ratingA = parseFloat(a.querySelector('.vote').textContent);
+      const ratingB = parseFloat(b.querySelector('.vote').textContent);
+      return ratingB - ratingA;
+  });
+  movieCards.forEach(card => cardList.appendChild(card));
+}
 
 function searchMovies() {
   const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
